@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mynotesflutter/views/login_view.dart';
 import 'package:mynotesflutter/views/register_view.dart';
+import 'package:mynotesflutter/views/verify_mail_view.dart';
 import 'firebase_options.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-     MaterialApp(
+    MaterialApp(
       home: const HomePage(
         title: '',
       ),
@@ -24,9 +25,6 @@ void main() {
   );
 }
 
-
-
-
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required String title});
 
@@ -39,15 +37,20 @@ class HomePage extends StatelessWidget {
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
-          // final user = FirebaseAuth.instance.currentUser;
-          // final emailVerified = user?.emailVerified ?? false;
-          // if (emailVerified) {}
-          // else {
-          //  Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const EmailVerification(),),);
-          // }
-            return const LoginView(
-              title: 'login',
-            );
+            final user = FirebaseAuth.instance.currentUser;
+            final emailVerified = user?.emailVerified ?? false;
+            if (user != null) {
+              if (emailVerified) {
+                print("Email Verified");
+              } else {
+                return const EmailVerification();
+              }
+            } else {
+              return const LoginView(
+                title: 'login',
+              );
+            }
+            return const Text('done!');
           default:
             return const RefreshProgressIndicator();
         }
@@ -55,4 +58,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
