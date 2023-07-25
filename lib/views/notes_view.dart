@@ -24,11 +24,21 @@ class _NotesViewState extends State<NotesView> {
               switch (value) {
                 case MenuAction.logout:
                   final shouldLogout = await showLogOutDialog(context);
-                  devtools.log(shouldLogout.toString());
+                 // devtools.log(shouldLogout.toString());
                   if (shouldLogout) {
                     await FirebaseAuth.instance.signOut();
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       loginRoute,
+                      (route) => false,
+                    );
+                  }
+                case MenuAction.deleteUser:
+                  final shouldDelete = await showDeleteDialog(context);
+                  //devtools.log(shouldDelete.toString());
+                  if (shouldDelete) {
+                    await FirebaseAuth.instance.currentUser?.delete();
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      registerRoute,
                       (route) => false,
                     );
                   }
@@ -39,6 +49,10 @@ class _NotesViewState extends State<NotesView> {
                 PopupMenuItem<MenuAction>(
                   value: MenuAction.logout,
                   child: Text('Logout'),
+                ),
+                PopupMenuItem<MenuAction>(
+                  value: MenuAction.deleteUser,
+                  child: Text('Delete Account'),
                 ),
               ];
             },

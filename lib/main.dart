@@ -1,4 +1,3 @@
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -64,7 +63,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-enum MenuAction { logout }
+enum MenuAction { logout, deleteUser }
 
 Future<bool> showLogOutDialog(BuildContext context) {
   return showDialog(
@@ -75,11 +74,11 @@ Future<bool> showLogOutDialog(BuildContext context) {
           'Sign Out',
           style: TextStyle(color: Colors.white),
         ),
+        content: const Text(
+          "Are you Sure you want to Logout?",
+          style: TextStyle(color: Colors.white, fontSize: 18),
+        ),
         actions: [
-          const Text(
-            "Are you Sure you want to Logout?",
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(false);
@@ -106,3 +105,36 @@ Future<bool> showLogOutDialog(BuildContext context) {
     (value) => value ?? false,
   );
 }
+
+
+
+Future<bool> showDeleteDialog(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Delete Account'),
+        content: const Text("Are you Sure you want to Delete this Account?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: const Text("Confirm"),
+          )
+        ],
+      );
+    },
+  ).then((value) => value ?? false);
+}
+
+
+
+
+

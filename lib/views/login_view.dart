@@ -4,6 +4,9 @@ import 'dart:developer' as devtools show log;
 
 import 'package:mynotesflutter/constants/routes.dart';
 
+import '../main.dart';
+import '../utilities/show_error_dialog.dart';
+
 class LoginView extends StatefulWidget {
   const LoginView({super.key, required this.title});
 
@@ -61,18 +64,22 @@ class _LoginViewState extends State<LoginView> {
                 );
                 devtools.log(userCredential.toString());
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/notes/',
+                  notesRoute,
                   (route) => false,
                 );
               } on FirebaseAuthException catch (error) {
                 if (error.code == 'wrong-password') {
-                  devtools.log("Invalid Email Id/Password");
+                  await showErrorDialog(context, "Invalid Email/Password");
+                  //devtools.log("Invalid Email Id/Password");
                 } else if (error.code == 'invalid-email') {
-                  devtools.log("Invalid Email Id");
+                  await showErrorDialog(context, "Invalid Email/Password");
+                  //devtools.log("Invalid Email Id");
                 } else if (error.code == 'user-not-found') {
-                  devtools.log("Email Id is not registered  with us");
+                  await showErrorDialog(context, "Email Id is not Registered.");
+                  //devtools.log("Email Id is not registered  with us");
                 } else {
-                  devtools.log(error.toString());
+                  await showErrorDialog(context, "Error: ${error.toString()}");
+                  //devtools.log(error.toString());
                 }
               }
             },
@@ -94,7 +101,7 @@ class _LoginViewState extends State<LoginView> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                notesRoute,
+                registerRoute,
                 (route) => false,
               );
             },
